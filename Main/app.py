@@ -2,7 +2,11 @@ from flask import Flask,render_template
 from flask_restful import Api, Resource, reqparse,request
 import random
 from flask_restful import Api, Resource, reqparse
+from flask import send_from_directory
+from openpyxl import load_workbook
 import random
+from flask import send_file
+
 
 app = Flask(__name__)
 # @app.route("/",methods=['GET'])
@@ -17,7 +21,45 @@ app = Flask(__name__)
 def homePage():
     return render_template('index.html')
 
-#@app.route("/getFile",methods= ["GET","PUT"])
+@app.route("/getFile",methods= ["POST"])
+def put():
+    Msg = "hi"
+    return 0
+
+@app.route('/foo', methods=['GET', 'POST'])
+def foo():
+    '''execute whatever code you want when the button gets clicked here'''
+    return "hi"
+
+@app.route('/index')
+def index():
+    path = "FileTOUpload.xlsx"
+    return send_file(path, as_attachment=True)
+
+    file_name = 'document_template.xltx'
+    wb = load_workbook('FileTOUpload.xlsx')
+    wb.save(file_name, as_template=True)
+
+    return send_from_directory(file_name, as_attachment=True)
+
+    # file_name = 'document_template.xltx'
+    # wb = load_workbook('FileTOUpload.xlsx')
+    # return wb
+    #
+    # wb.save(file_name)
+    #
+    # return send_from_directory(file_name, as_attachment=True)
+
+    # user = {'username': 'Miguel'}
+    # return render_template('index.html', title='PII', user=user)
+#file upload
+#links click display file
+#UI focus
+
+#get : dislay file content..
+#post : button user can upload a file
+
+@app.route("/getFile",methods= ["GET"])
 def startAPI(id=0):
     ai_quotes = [
         {
@@ -172,6 +214,7 @@ def startAPI(id=0):
         return get(id)
 
     if request.method == 'POST':
+        print("here")
         return post(id)
 
     # api = Api(app)
